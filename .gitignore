@@ -109,6 +109,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+fastapi-gql/
+.vscode
 
 # Spyder project settings
 .spyderproject
