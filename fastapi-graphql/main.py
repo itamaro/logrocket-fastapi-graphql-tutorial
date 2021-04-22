@@ -32,6 +32,8 @@ class CreateCourse(Mutation):
     async def mutate(self, info, id, title, instructor):
         with open("./courses.json", "r+") as courses:
             course_list = json.load(courses)
+            if any(course["id"] == id for course in course_list):
+                raise Exception("Course with provided id already exists!")
             course_list.append({"id": id, "title": title, "instructor": instructor})
             courses.seek(0)
             json.dump(course_list, courses, indent=2)
