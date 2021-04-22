@@ -9,7 +9,7 @@ import uvicorn
 from schemas import CourseType
 
 
-class Query(ObjectType):
+class GetCoursesQuery(ObjectType):
     course_list = None
     get_courses = Field(List(CourseType), id=String())
 
@@ -38,7 +38,7 @@ class CreateCourse(Mutation):
         return CreateCourse(course=course_list[-1])
 
 
-class Mutation(ObjectType):
+class CreateCourseMutation(ObjectType):
     create_course = CreateCourse.Field()
 
 
@@ -46,7 +46,8 @@ app = FastAPI()
 app.add_route(
     "/",
     GraphQLApp(
-        schema=Schema(query=Query, mutation=Mutation), executor_class=AsyncioExecutor
+        schema=Schema(query=GetCoursesQuery, mutation=CreateCourseMutation),
+        executor_class=AsyncioExecutor,
     ),
 )
 
