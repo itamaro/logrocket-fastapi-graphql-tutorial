@@ -10,6 +10,7 @@ cd logrocket-fastapi-graphql-tutorial
 python3 -m venv fastapi-graphql-venv
 source fastapi-graphql-venv/bin/activate
 pip install fastapi uvicorn graphene
+cd fastapi-graphql
 uvicorn main:app --reload
 ```
 
