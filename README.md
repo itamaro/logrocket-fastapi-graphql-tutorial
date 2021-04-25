@@ -75,3 +75,55 @@ mutation CreateCourseMutation {
   }
 }
 ```
+
+## Testing with curl
+
+```
+>curl 'https://fastapi-graphql-demo-mrbe4zqmdq-uw.a.run.app/' -XPOST -H "Content-Type: application/json" --data '{"query":"query GetCoursesQuery { getCourses { id title instructor publishDate } }","variables":null,"operationName":"GetCoursesQuery"}'
+{"data":{"getCourses":[{"id":"1","title":"Python variables explained","instructor":"Tracy Williams","publishDate":"12th May 2020"},{"id":"2","title":"How to use functions in Python","instructor":"Jane Black","publishDate":"9th April 2018"},{"id":"3","title":"Asynchronous Python","instructor":"Matthew Rivers","publishDate":"10th July 2020"},{"id":"4","title":"Build a REST API","instructor":"Babatunde Mayowa","publishDate":"3rd March 2016"},{"id":"11","title":"Python Lists","instructor":"Jane Melody","publishDate":null}]}}
+```
+
+Using `jq` for pretty printing:
+
+```
+>curl 'https://fastapi-graphql-demo-mrbe4zqmdq-uw.a.run.app/' -XPOST -H "Content-Type: application/json" --data '{"query":"query GetCoursesQuery { getCourses { id title instructor publishDate } }","variables":null,"operationName":"GetCoursesQuery"}' | jq -C
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   661  100   526  100   135   5057   1298 --:--:-- --:--:-- --:--:--  6355
+{
+  "data": {
+    "getCourses": [
+      {
+        "id": "1",
+        "title": "Python variables explained",
+        "instructor": "Tracy Williams",
+        "publishDate": "12th May 2020"
+      },
+      {
+        "id": "2",
+        "title": "How to use functions in Python",
+        "instructor": "Jane Black",
+        "publishDate": "9th April 2018"
+      },
+      {
+        "id": "3",
+        "title": "Asynchronous Python",
+        "instructor": "Matthew Rivers",
+        "publishDate": "10th July 2020"
+      },
+      {
+        "id": "4",
+        "title": "Build a REST API",
+        "instructor": "Babatunde Mayowa",
+        "publishDate": "3rd March 2016"
+      },
+      {
+        "id": "11",
+        "title": "Python Lists",
+        "instructor": "Jane Melody",
+        "publishDate": null
+      }
+    ]
+  }
+}
+```
