@@ -127,3 +127,30 @@ Using `jq` for pretty printing:
   }
 }
 ```
+
+## Require Auth
+
+```
+export PROJECT_ID="$( gcloud config get-value project )"
+gcloud builds submit
+gcloud run deploy fastapi-graphql-auth-demo --image=gcr.io/$PROJECT_ID/fastapi-graphql-app --platform=managed --no-allow-unauthenticated
+```
+
+Now curl gets 403:
+
+```
+>curl -i 'https://fastapi-graphql-auth-demo-mrbe4zqmdq-uw.a.run.app/' -XPOST -H "Content-Type: application/json" --data '{"query":"query GetCoursesQuery { getCourses { id title instructor publishDate } }","variables":null,"operationName":"GetCoursesQuery"}'
+HTTP/2 403
+date: Sun, 25 Apr 2021 18:22:01 GMT
+content-type: text/html; charset=UTF-8
+server: Google Frontend
+content-length: 295
+...
+```
+
+If we add ID token as bearer authorization header then it works again:
+
+```
+>curl 'https://fastapi-graphql-auth-demo-mrbe4zqmdq-uw.a.run.app/' -XPOST -H "Content-Type: application/json" -H "Authorization: Bearer $(gcloud auth print-identity-token)" --data '{"query":"query GetCoursesQuery { getCourses { id title instructor publishDate } }","variables":null,"operationName":"GetCoursesQuery"}'
+{"data":{"getCourses":[{"id":"1","title":"Python variables explained","instructor":"Tracy Williams","publishDate":"12th May 2020"},{"id":"2","title":"How to use functions in Python","instructor":"Jane Black","publishDate":"9th April 2018"},{"id":"3","title":"Asynchronous Python","instructor":"Matthew Rivers","publishDate":"10th July 2020"},{"id":"4","title":"Build a REST API","instructor":"Babatunde Mayowa","publishDate":"3rd March 2016"}]}}
+```
